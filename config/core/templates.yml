@@ -1,0 +1,134 @@
+# Copyright (c) 2015 Shotgun Software Inc.
+#
+# CONFIDENTIAL AND PROPRIETARY
+#
+# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
+# Source Code License included in this distribution package. See LICENSE.
+# By accessing, using, copying or modifying this work you indicate your
+# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
+# not expressly granted therein are reserved by Shotgun Software Inc.
+#
+
+# Author: Diego Garcia Huerta
+# Contact: https://www.linkedin.com/in/diegogh/
+#
+# YOU SHOULD MERGE these entries into your template.yml configuration file, as
+# THIS FILE BY ITSELF WILL NOT WORK 
+# These are the additions to the template.yml to get the engine up and 
+# running with the default tk-apps
+
+
+keys:
+    # ---- Krita
+    krita.image_extension:
+        type: str
+        alias: extension
+        default: png
+
+    krita.layer_name:
+        type: str
+        alias: name
+
+paths:
+    # ---- Krita
+
+    # asset
+    # define the location of a work area
+    asset_work_area_krita:
+        definition: '@asset_root/work/krita'
+        root_name: 'primary'
+
+    # define the location of a publish area
+    asset_publish_area_krita:
+        definition: '@asset_root/publish/krita'
+        root_name: 'primary'
+
+    # The location of WIP files
+    krita_asset_work:
+        definition: '@asset_work_area_krita/{name}.v{version}.kra'
+        root_name: 'primary'
+
+    # The location of backups of WIP files
+    krita_asset_snapshot:
+        definition: '@asset_work_area_krita/snapshots/{name}.v{version}.{timestamp}.kra'
+        root_name: 'primary'
+
+    # Location of the Krita session once published
+    krita_asset_publish:
+        definition: '@asset_publish_area_krita/{name}.v{version}.kra'
+        root_name: 'primary'
+
+    # These templates are related to publishing layers within Krita
+    
+    # where to export the individual layers before publishing them
+    krita_asset_layer_export:
+        definition: '@asset_root/work/krita/layers/{Asset}_krita_layers.v{version}/@krita_layer_name'
+        root_name: 'primary'
+
+    # where to publish the individual layers
+    krita_asset_layer_publish:
+        definition: '@asset_root/publish/krita/layers/{Asset}_krita_layers.v{version}/@krita_layer_name'
+        root_name: 'primary'
+
+    # where to export layers as a folder before publishing
+    krita_asset_layers_export:
+        definition: '@asset_root/work/krita/layers/{Asset}_krita_layers.v{version}'
+        root_name: 'primary'
+
+    # where to publish layers as a folder
+    krita_asset_layers_publish:
+        definition: '@asset_root/publish/krita/layers/{Asset}_krita_layers.v{version}'
+        root_name: 'primary'
+
+    # shot 
+    # define the location of a work area
+    shot_work_area_krita:
+        definition: '@shot_root/work/krita'
+        root_name: 'primary'
+
+    # define the location of a publish area
+    shot_publish_area_krita:
+        definition: '@shot_root/publish/krita'
+        root_name: 'primary'
+
+    # The location of WIP files
+    krita_shot_work:
+        definition: '@shot_root/work/krita/{name}.v{version}/{name}.v{version}.kra'
+        root_name: 'primary'
+
+    # The location of backups of WIP files
+    krita_shot_snapshot:
+        definition: '@shot_root/work/krita/snapshots/{name}.v{version}/{name}.v{version}.{timestamp}.kra'
+        root_name: 'primary'
+
+    # The location of published krita session
+    krita_shot_publish:
+        definition: '@shot_root/publish/krita/{name}.v{version}/{name}.v{version}.kra'
+        root_name: 'primary'
+    
+    # These templates are related to publishing layers within Krita
+    # where to export the individual layers before publishing them
+    krita_shot_layer_export:
+        definition: '@shot_root/work/krita/layers/{Shot}_krita_layers.v{version}/@krita_layer_name'
+        root_name: 'primary'
+
+    # where to publish the individual layers
+    krita_shot_layer_publish:
+        definition: '@shot_root/publish/krita/layers/{Shot}_krita_layers.v{version}/@krita_layer_name'
+        root_name: 'primary'
+
+    # where to export layers as a folder before publishing
+    krita_shot_layers_export:
+        definition: '@shot_root/work/krita/layers/{Shot}_krita_layers.v{version}'
+        root_name: 'primary'
+
+    # where to publish layers as a folder
+    krita_shot_layers_publish:
+        definition: '@shot_root/publish/krita/layers/{Shot}_krita_layers.v{version}'
+        root_name: 'primary'
+
+
+strings:
+    # ---- Krita
+    # represents the name of a layer file
+    krita_layer_name: "{krita.layer_name}.{krita.image_extension}"

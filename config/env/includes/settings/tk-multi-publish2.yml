@@ -1,0 +1,100 @@
+# Copyright (c) 2017 Shotgun Software Inc.
+#
+# CONFIDENTIAL AND PROPRIETARY
+#
+# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
+# Source Code License included in this distribution package. See LICENSE.
+# By accessing, using, copying or modifying this work you indicate your
+# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
+# not expressly granted therein are reserved by Shotgun Software Inc.
+#
+
+# Author: Diego Garcia Huerta
+# Contact: https://www.linkedin.com/in/diegogh/
+#
+# YOU SHOULD MERGE these entries into your settings file, as
+# THIS FILE BY ITSELF WILL NOT WORK 
+# These are the additions to get the engine up and running with the 
+# default tk-apps for this environment
+
+
+# ---- Krita
+
+# asset step
+settings.tk-multi-publish2.krita.asset_step:
+  collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
+  collector_settings:
+      Work Template: krita_asset_work
+      Publish Layers as Folder: true
+  publish_plugins:
+  - name: Publish to Shotgun
+    hook: "{self}/publish_file.py"
+    settings: {}
+  - name: Upload for review
+    hook: "{self}/upload_version.py"
+    settings: {}
+  - name: Begin file versioning
+    hook: "{engine}/tk-multi-publish2/basic/start_version_control.py"
+    settings: {}
+  - name: Publish to Shotgun
+    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_session.py"
+    settings:
+        Publish Template: krita_asset_publish
+  - name: Publish Layers to Shotgun
+    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_layers.py"
+    settings:
+        # defines what folder to use as a export
+        Export Template: krita_asset_layers_export
+        # defines the name of a layer file
+        Layer Name Template: krita_layer_name
+        # defines what folder to use as a publish
+        Publish Template: krita_asset_layers_publish
+  - name: Publish Layer to Shotgun
+    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_layer.py"
+    settings:
+        Publish Template: krita_asset_layer_publish
+        # defines the name of the file that will be exported prior being published
+        Export Template: krita_asset_layer_export
+        # defines the name of the file that will be published
+  help_url: *help_url
+  location: "@apps.tk-multi-publish2.location"
+
+
+# shot step
+settings.tk-multi-publish2.krita.shot_step:
+  collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
+  collector_settings:
+      Work Template: krita_shot_work
+      Publish Layers as Folder: true
+  publish_plugins:
+  - name: Publish to Shotgun
+    hook: "{self}/publish_file.py"
+    settings: {}
+  - name: Upload for review
+    hook: "{self}/upload_version.py"
+    settings: {}
+  - name: Begin file versioning
+    hook: "{engine}/tk-multi-publish2/basic/start_version_control.py"
+    settings: {}
+  - name: Publish to Shotgun
+    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_session.py"
+    settings:
+        Publish Template: krita_shot_publish
+  - name: Publish Layers to Shotgun
+    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_layers.py"
+    settings:
+        # defines what folder to use as a export
+        Export Template: krita_shot_layers_export
+        # defines the name of a layer file
+        Layer Name Template: krita_layer_name
+        # defines what folder to use as a publish
+        Publish Template: krita_shot_layers_publish
+  - name: Publish Layer to Shotgun
+    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_layer.py"
+    settings:
+        Publish Template: krita_shot_layer_publish
+        # defines the name of the file that will be exported prior being published
+        Export Template: krita_shot_layer_export
+        # defines the name of the file that will be published
+  help_url: *help_url
+  location: "@apps.tk-multi-publish2.location"
