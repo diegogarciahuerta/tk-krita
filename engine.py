@@ -293,6 +293,13 @@ class PyQt5Patcher(PySide2Patcher):
         :param QtWidgets: The QtWidgets module.
         :param PyQt5: The PyQt5 module.
         """
+
+        # Add this version info otherwise it breaks since tk_core v0.19.9
+        # PySide2Patcher is now checking the version of PySide2 in a way
+        # that PyQt5 does not like: __version_info__ is not defined in PyQt5
+        version  = list(map(int, QtCore.PYQT_VERSION_STR.split(".")))
+        PyQt5.__version_info__ = version
+
         QtCore, QtGui = PySide2Patcher.patch(QtCore, QtGui, QtWidgets, PyQt5)
 
         def SIGNAL(arg):
