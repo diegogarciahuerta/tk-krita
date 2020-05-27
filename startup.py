@@ -33,7 +33,27 @@ logger = sgtk.LogManager.get_logger(__name__)
 cgitb.enable(format="text")
 
 
+def resolve_path(path):
+    """
+    Returns a path by resolving variables, user name, symbolic links, etc...
+    """
+    return reduce(
+        lambda x, f: f(x),
+        (
+            os.path.expanduser,
+            os.path.expandvars,
+            os.path.abspath,
+            os.path.realpath,
+            os.path.normpath,
+        ),
+        path,
+    )
+
+
 def sha256(fname):
+    """
+    Calculates the hash of a file, used to compare small files.
+    """
     hash_sha256 = hashlib.sha256()
     with open(fname, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
@@ -42,6 +62,9 @@ def sha256(fname):
 
 
 def samefile(file1, file2):
+    """
+    Returns true if two files have the same hash.
+    """
     return sha256(file1) == sha256(file2)
 
 
@@ -125,15 +148,37 @@ class KritaLauncher(SoftwareLauncher):
     # of the supported operating systems. The templates are used for both
     # globbing and regex matches by replacing the named format placeholders
     # with an appropriate glob or regex string.
+    # Worse case we use to a env variable "$KRITA_BIN" so it can be
+    # configured externally
 
     EXECUTABLE_TEMPLATES = {
-        "darwin": ["$KRITA_BIN", "/Applications/krita/Krita/Krita.app"],
+        "darwin": ["$KRITA_BIN", "/Applications/krita.app/Contents/MacOS/krita"],
         "win32": [
             "$KRITA_BIN",
             "C:/Program Files/Krita {platform_version}/bin/krita.exe",
             "C:/Program Files {platform}/Krita {platform_version}/bin/krita.exe",
         ],
         "linux": ["$KRITA_BIN", "/usr/bin/krita"],
+    }
+
+    # These are possible locations for the scripts path collected from several
+    # sources, krita docs, krita installation in different OSs.
+    # Worse case we use to a env variable "$KRITA_RESOURCES_PATH" so it can be
+    # configured externally
+    
+    USER_PLUGINS_ROOT_PATH = {
+        "darwin": [
+            "$KRITA_RESOURCES_PATH",
+            r"~/Library/Application Support/krita",
+            r"~/Library/Preferences/krita",
+        ],
+        "win32": ["$KRITA_RESOURCES_PATH", r"%APPDATA%\krita"],
+        "linux": [
+            "$KRITA_RESOURCES_PATH",
+            r"~/.local/share/krita",
+            r"~/.var/app/org.kde.krita/data/krita",
+            r"~/.config/krita",
+        ],
     }
 
     def prepare_launch(self, exec_path, args, file_to_open=None):
@@ -164,19 +209,41 @@ class KritaLauncher(SoftwareLauncher):
         required_env["SGTK_ENGINE"] = ENGINE_NAME
         required_env["SGTK_CONTEXT"] = sgtk.context.serialize(self.context)
         required_env["SGTK_MODULE_PATH"] = get_sgtk_module_path()
-        required_env["__COMPAT_LAYER"] = ""
 
         if file_to_open:
             # Add the file name to open to the launch environment
             required_env["SGTK_FILE_TO_OPEN"] = file_to_open
 
-        if sys.platform == "win32":
-            user_plugins_path = os.path.expandvars(r"%APPDATA%\krita\pykrita")
-        else:
+        # figure out where the shotgun bridge extension should be copied
+        user_plugins_root_paths = self.USER_PLUGINS_ROOT_PATH.get(
+            "darwin"
+            if sgtk.util.is_macos()
+            else "win32"
+            if sgtk.util.is_windows()
+            else "linux"
+            if sgtk.util.is_linux()
+            else []
+        )
+
+        if not user_plugins_root_paths:
             raise NotImplementedError
 
-        ensure_scripts_up_to_date(resources_plugins_path, user_plugins_path)
+        scripts_synced = False
+        for user_plugins_root_path in user_plugins_root_paths:
+            user_plugins_root_path = resolve_path(user_plugins_root_path)
+            if os.path.exists(user_plugins_root_path):
+                user_plugins_path = os.path.join(user_plugins_root_path, "pykrita")
+                if not os.path.exists(user_plugins_path):
+                    os.makedirs(user_plugins_path)
 
+                ensure_scripts_up_to_date(resources_plugins_path, user_plugins_path)
+                scripts_synced = True
+
+        if not scripts_synced:
+            raise sgtk.TankError(
+                "Could not find the resources path for Krita. Searched here: %s"
+                % user_plugins_root_paths
+            )
         os.chdir(os.path.dirname(os.path.dirname(exec_path)))
         return LaunchInformation(path=exec_path, environ=required_env)
 
