@@ -213,7 +213,7 @@ You can find this option by accessing the Plugin Manager options:
 
 Mark the Shotgun plugin as active and make sure you restart Krita from Shotgun Desktop. Once this is done, a new `Shotgun` menu will be shown in the menu bar. 
 
-<img src="./config/images/enable_plugin.png" width="50%" alt="engine_is_configured">
+<img src="./config/images/enable_plugin.png" width="100%" alt="engine_is_configured">
 
 
 ## Krita engine options:
