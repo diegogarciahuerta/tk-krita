@@ -204,6 +204,17 @@ If we now go back and forth from our project in shotgun desktop ( < arrow top le
 
 <img src="./config/images/engine_is_configured.png" width="50%" alt="engine_is_configured">
 
+## Enable the Shotgun Plugin Engine within Krita
+
+One last step! The first time that you use the integration, you will have to make sure the Shotgun Engine plugin is enabled within Krita. 
+
+You can find this option by accessing the Plugin Manager options:
+`Settings > Configure Krita > Python Plugin Manager ... > Shotgun`
+
+Mark the Shotgun plugin as active and make sure you restart Krita from Shotgun Desktop. Once this is done, a new `Shotgun` menu will be shown in the menu bar. 
+
+<img src="./config/images/enable_plugin.png" width="50%" alt="engine_is_configured">
+
 
 ## Krita engine options:
 
