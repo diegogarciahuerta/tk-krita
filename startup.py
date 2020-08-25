@@ -244,7 +244,6 @@ class KritaLauncher(SoftwareLauncher):
                 "Could not find the resources path for Krita. Searched here: %s"
                 % user_plugins_root_paths
             )
-        # os.chdir(os.path.dirname(os.path.dirname(exec_path)))
         return LaunchInformation(path=exec_path, environ=required_env)
 
     def _icon_from_engine(self):
