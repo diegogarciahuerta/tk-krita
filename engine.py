@@ -657,7 +657,7 @@ class KritaEngine(Engine):
             show_error(msg)
             raise tank.TankError(msg)
 
-        if krita_ver > MIN_COMPATIBILITY_VERSION + 1:
+        if krita_ver > MIN_COMPATIBILITY_VERSION:
             # show a warning that this version of Krita isn't yet fully tested
             # with Shotgun:
             msg = (

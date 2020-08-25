@@ -165,7 +165,7 @@ class KritaLauncher(SoftwareLauncher):
     # sources, krita docs, krita installation in different OSs.
     # Worse case we use to a env variable "$KRITA_RESOURCES_PATH" so it can be
     # configured externally
-    
+
     USER_PLUGINS_ROOT_PATH = {
         "darwin": [
             "$KRITA_RESOURCES_PATH",
