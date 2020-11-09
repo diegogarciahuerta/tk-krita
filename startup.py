@@ -1,12 +1,14 @@
-# Copyright (c) 2013 Shotgun Software Inc.
+# ----------------------------------------------------------------------------
+# Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# CONFIDENTIAL AND PROPRIETARY
+# Your use of this software as distributed in this GitHub repository, is 
+# governed by the BSD 3-clause License.
 #
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
-# Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
-# not expressly granted therein are reserved by Shotgun Software Inc.
+# Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
+# agreement between you and Autodesk / Shotgun.
+#
+# The full license is in the file LICENSE, distributed with this software.
+# ----------------------------------------------------------------------------
 
 import os
 import sys
